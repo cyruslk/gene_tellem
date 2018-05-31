@@ -1,0 +1,28 @@
+{
+  "name": "socket_tweets",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:5000",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "base64-img": "^1.0.4",
+    "body-parser": "^1.18.3",
+    "cross-fetch": "^2.2.0",
+    "express": "^4.16.3",
+    "mongodb": "^3.1.0-beta4",
+    "node-fetch": "^2.1.2",
+    "react": "^16.3.2",
+    "react-canvas-draw": "^0.1.9",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4",
+    "react-twitter-widgets": "^1.7.1",
+    "socket.io": "^2.1.0",
+    "socket.io-client": "^2.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
