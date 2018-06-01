@@ -47,7 +47,7 @@ body{
   text-shadow: none;
   font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
   font-size: 2vw;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 50px;
   padding: 0.5vw;
   /* transform: rotate(4deg); */
@@ -87,7 +87,7 @@ body{
 span{
   font-family: TimesNewRoman;
   font-weight: bold;
-  text-shadow: 0 0 44px white;
+  /* text-shadow: 0 0 44px white; */
   -webkit-text-stroke: 0;
 }
 

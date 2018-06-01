@@ -35,14 +35,15 @@ class App extends Component {
    })
 
       const colorsRandom = [
-        "CadetBlue",
-        "DarkSlateBlue",
-        "GoldenRod",
-        "LightBlue",
-        "LightSeaGreen",
-        "LightSteelBlue",
-        "Purple",
-        "Salmon"
+        "#00ff00",
+        "#4d004d"
+        // "DarkSlateBlue",
+        // "GoldenRod",
+        // "LightBlue",
+        // "LightSeaGreen",
+        // "LightSteelBlue",
+        // "Purple",
+        // "Salmon"
       ];
 
       function returnColour(){
@@ -64,8 +65,7 @@ class App extends Component {
       backgroundColor: this.state.pickenColour
     }
     const coloredBackgroundBlocsH1 = {
-      color: "white",
-      textShadow: `0 0 44px ${this.state.pickenColour}`
+      color: "white"
     }
     const coloredBackgroundBlocsSpans = {
       color: this.state.pickenColour
@@ -77,7 +77,7 @@ class App extends Component {
     }
     const whiteBackgroundBlocsH1 = {
       color: "white",
-      textShadow: `0 0 44px ${this.state.pickenColour}`
+      // textShadow: `0 0 44px ${this.state.pickenColour}`
     }
     const whiteBackgroundBlocsSpans = {
       color: this.state.pickenColour
@@ -87,8 +87,8 @@ class App extends Component {
       if(i % 2 === 0){
         return (
 
-               <section key={i} className="main_sections" style={whiteBackgroundBlocs}>
-                      <h1 key={i+1*1}style={whiteBackgroundBlocsH1}>{item.name}
+               <section key={i} className="main_sections">
+                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{item.name}
                         <span style={whiteBackgroundBlocsSpans}>{item.blury_text}</span>{item.name_end}
                       </h1>
                 </section>
@@ -121,9 +121,8 @@ class App extends Component {
                                      backgroundColor: this.state.pickenColour,
                                      border: "none"};
 
-    const whiteBackgroundHeader = {color: this.state.pickenColour,
-                                   backgroundColor: "white",
-                                   border: `1px solid ${this.state.pickenColour}`}
+    const whiteBackgroundHeader = {color: "black",
+                                   backgroundColor: "white"};
 
     var itemHeader = this.state.headerData.map((item, i) => {
       if(i%2){

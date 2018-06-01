@@ -112,6 +112,7 @@ class App extends Component {
      this.setState({
        pickenImages: data
      })
+     
      // fetch('/sendPic', {
      //   method: 'POST',
      //   body: JSON.stringify(data),
