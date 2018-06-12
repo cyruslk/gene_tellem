@@ -14,7 +14,7 @@ body{
 
 .main_container h1{
   font-size: 21vw;
-  font-family: arial;
+  font-family: TimesNewRoman;
   margin: 0;
   font-weight: lighter;
   line-height: 90%;
@@ -40,6 +40,7 @@ body{
   justify-content: center;
   flex-direction: row;
   position: fixed;
+  z-index: 100000;
   }
 
 .main_container header span{
@@ -98,14 +99,19 @@ span{
 
 .canvas{
   background-color: transparent;
-  /* transform: rotate(22deg); */
-  /* border: 1px solid black; */
   margin: 0;
-  top: 0;
+  position: absolute;
+  width: 100vw;
+  height: 116.6vh;
+  display: block;
+  z-index: 1;
+}
+
+.canvas_fixed{
   position: fixed;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 10;
 }
 
 .loader_screen_container{

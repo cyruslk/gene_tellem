@@ -14,9 +14,11 @@ class App extends Component {
           data: [],
           headerData: []
       };
+      this.sectionHeight = React.createRef()
     }
 
     componentDidMount(){
+
 
      fetch('/cms-data')
      .then(res => res.json())
@@ -32,18 +34,18 @@ class App extends Component {
      this.setState({
        headerData: responseJson
      });
+
    })
 
       const colorsRandom = [
         "#00ff00",
-        "#4d004d"
-        // "DarkSlateBlue",
-        // "GoldenRod",
-        // "LightBlue",
-        // "LightSeaGreen",
-        // "LightSteelBlue",
-        // "Purple",
-        // "Salmon"
+          "DarkSlateBlue",
+          "GoldenRod",
+          "LightBlue",
+          "LightSeaGreen",
+          "LightSteelBlue",
+          "Purple",
+          "Salmon"
       ];
 
       function returnColour(){
@@ -68,27 +70,47 @@ class App extends Component {
       color: "white"
     }
     const coloredBackgroundBlocsSpans = {
-      color: this.state.pickenColour
+      color: "white"
     }
-
-
     const whiteBackgroundBlocs = {
       backgroundColor: "white"
     }
     const whiteBackgroundBlocsH1 = {
-      color: "white",
-      // textShadow: `0 0 44px ${this.state.pickenColour}`
+      color: this.state.pickenColour
     }
     const whiteBackgroundBlocsSpans = {
       color: this.state.pickenColour
     }
 
+    const test = {
+      color: "red"
+    }
+
+
     var items = this.state.data.map((item, i) => {
+
+
+      console.log("this is the item", item);
+
+      const stringToArray = item.name.split("");
+      const newArray = [];
+
+
+      function makeRandomAnims(){
+         stringToArray.map((item, i) => {
+          newArray.push(<span key={i} >{item}</span>)
+        })
+        console.log("this is the new array", newArray);
+        console.log("--->", newArray.length);
+      }
+
+      makeRandomAnims();
+
       if(i % 2 === 0){
         return (
 
                <section key={i} className="main_sections">
-                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{item.name}
+                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{newArray}
                         <span style={whiteBackgroundBlocsSpans}>{item.blury_text}</span>{item.name_end}
                       </h1>
                 </section>
@@ -109,7 +131,13 @@ class App extends Component {
     var resultsRender = [];
     for (var i = 0; i < items.length; i++) {
       resultsRender.push(items[i]);
-      if (i % 3 === 2) {
+
+      console.log(i, items[i]);
+
+      console.log();
+
+      if (i % 2 === 0) {
+        console.log("---");
         resultsRender.push(
           <GeneCanvas key={i+4*4} className="canvas"/>
         );
@@ -127,11 +155,19 @@ class App extends Component {
     var itemHeader = this.state.headerData.map((item, i) => {
       if(i%2){
         return (
-          <span key={i+1*2} style={coloredBackgroundHeader}>{item.name}</span>
+          <span key={i+1*2}
+          ref={this.myDiv}
+          style={coloredBackgroundHeader}>
+            {item.name}
+          </span>
         )
       }else{
         return (
-            <span key={i+2*4} style={whiteBackgroundHeader}>{item.name}</span>
+            <span key={i+2*4}
+            style={whiteBackgroundHeader}
+            ref={this.myDiv}>
+              {item.name}
+            </span>
         )
       }
     })
