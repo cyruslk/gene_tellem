@@ -14,7 +14,9 @@ class App extends Component {
         current: "",
         drawing: true,
         pickenImages: "",
-        numberOfCanvases: 1
+        numberOfCanvases: 1,
+        populate: this.props.populate,
+        zIndex: this.props.zIndex
       };
 
       this._onMouseMove = this._onMouseMove.bind(this);
@@ -26,23 +28,19 @@ class App extends Component {
     componentDidMount() {
          this.getCanvas();
          this.fetchImages();
-
      }
 
      getCanvas() {
        this.setState({
          canvas: this.refs.canvas,
          context: this.refs.canvas.getContext('2d'),
-         current: {color: "black"}
+         current: {color: this.props.color}
        })
     }
-    onResize() {
-      // change width and heights of canvas?
-     }
+
 
     fetchImages() {
       const url = `/random/${this.state.numberOfCanvases}`;
-      // console.log("this is the random url", url);
       fetch(url)
           .then((res) => {
           return res.json();
@@ -55,13 +53,19 @@ class App extends Component {
       }
 
     populateImage(){
-      // console.log("HERE!", this.state.pickenImages);
-      const img = new Image();
-      img.src = this.state.pickenImages;
-      var that = this;
-      img.onload = function() {
-       that.state.context.drawImage(img, 0, 0);
-      };
+
+      console.log(this.state.pickenImages, "---->");
+
+      if(this.state.populate){
+        // console.log("HERE!", this.state.pickenImages);
+        const img = new Image();
+        img.src = this.state.pickenImages;
+        var that = this;
+        img.onload = function() {
+         that.state.context.drawImage(img, 0, 0);
+        };
+
+      }
     }
 
 
@@ -105,6 +109,8 @@ class App extends Component {
       current.y = e.clientY;
     }
 
+
+
     createImage(){
       const data = {
        data: this.state.canvas.toDataURL(),
@@ -112,7 +118,6 @@ class App extends Component {
      this.setState({
        pickenImages: data
      })
-
      // fetch('/sendPic', {
      //   method: 'POST',
      //   body: JSON.stringify(data),
@@ -139,6 +144,8 @@ class App extends Component {
 
   render() {
 
+      const style = {zIndex: this.state.zIndex}
+
       return (
         <div className="main_container">
         <canvas className="canvas"
@@ -146,6 +153,7 @@ class App extends Component {
         onMouseDown={this.onMouseDown}
         onMouseUp={this._onMouseUp}
         onMouseOut={this._onMouseOut}
+        style={style}
         ref="canvas"
         />
          </div>
