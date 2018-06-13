@@ -35,15 +35,14 @@ class App extends Component {
    })
 
       const colorsRandom = [
-        "#00ff00",
-        "#4d004d"
-        // "DarkSlateBlue",
-        // "GoldenRod",
-        // "LightBlue",
-        // "LightSeaGreen",
-        // "LightSteelBlue",
-        // "Purple",
-        // "Salmon"
+        "#4d004d",
+        "DarkSlateBlue",
+        "GoldenRod",
+        "LightBlue",
+        "LightSeaGreen",
+        "LightSteelBlue",
+        "Purple",
+        "Salmon"
       ];
 
       function returnColour(){
@@ -83,13 +82,41 @@ class App extends Component {
       color: this.state.pickenColour
     }
 
-    var items = this.state.data.map((item, i) => {
+      var items = this.state.data.map((item, i) => {
+
+      const stringToArrayName = item.name.split("");
+      const stringToArrayBluryText = item.name_end.split(" ");
+
+      const newArrayName = [];
+      const newArrayBluryText = [];
+
+
+      // to optimize
+      const classNameList = ["hvr-wobble-horizontal", "regular-span"];
+      const classNameListFilter = ["hvr-wobble-horizontal", "regular-span"];
+
+
+
+      function convertToSpans(oldArray, newArray, animArray){
+
+        function returnRandomAnims(animArray){
+          return animArray[Math.floor(Math.random() * animArray.length)];
+        }
+         oldArray.map((item, i) => {
+          newArray.push(<span key={i} className={returnRandomAnims(animArray)}>{item}</span>)
+        })
+      };
+        convertToSpans(stringToArrayName, newArrayName, classNameList);
+        convertToSpans(stringToArrayBluryText, newArrayBluryText, classNameListFilter);
+
+
+
       if(i % 2 === 0){
         return (
 
                <section key={i} className="main_sections">
-                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{item.name}
-                        <span style={whiteBackgroundBlocsSpans}>{item.blury_text}</span>{item.name_end}
+                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{newArrayName}
+                      <span style={whiteBackgroundBlocsSpans}>{item.blury_text}</span>{newArrayBluryText}
                       </h1>
                 </section>
               )
@@ -98,8 +125,8 @@ class App extends Component {
         return (
 
                <section key={i} className="main_sections" style={coloredBackgroundBlocs}>
-                      <h1 key={i+1*1} style={coloredBackgroundBlocsH1}>{item.name}
-                          <span style={coloredBackgroundBlocsSpans}>{item.blury_text}</span>{item.name_end}
+                      <h1 key={i+1*1} style={coloredBackgroundBlocsH1}>{newArrayName}
+                      <span style={coloredBackgroundBlocsSpans}>{item.blury_text}</span> {newArrayBluryText}
                        </h1>
                 </section>
               )

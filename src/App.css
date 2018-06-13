@@ -12,16 +12,6 @@ body{
   overflow-x: hidden;
 }
 
-.main_container h1{
-  font-size: 21vw;
-  font-family: arial;
-  margin: 0;
-  font-weight: lighter;
-  line-height: 90%;
-  position: relative;
-  z-index: 100;
-}
-
 .main_container section{
   padding: 1vw;
   padding-top: 7vw;
@@ -127,6 +117,44 @@ span{
   border: none;
 }
 
+.main_container h1{
+  font-size: 19.5vw;
+  font-family: TimesNewRoman;
+  margin: 0;
+  font-weight: lighter;
+  line-height: 90%;
+  position: relative;
+  z-index: 100;
+}
+
+.hvr-wobble-horizontal{
+  font-family: TimesNewRoman;
+  font-weight: lighter;
+  animation-name: wobble-horizontal;
+  animation-duration: 4s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  display: inline-block;
+}
+
+.hvr-wobble-top{
+  animation-name: wobble-top;
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  display: inline-block;
+}
+
+.hvr-wobble-to-bottom-right{
+  animation-name: hvr-wobble-to-bottom-right;
+  animation-duration: 10s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  display: inline-block;
+  font-family: TimesNewRoman;
+  font-weight: bold;
+}
+
 
 @keyframes flash_loader {
   0%, 50%, 100%{
@@ -136,15 +164,85 @@ span{
   }
 }
 
-@keyframes moving_secondDesc {
-  0% {
-      transform: scale(1);
+/* Wobble Top */
+@keyframes wobble-top {
+	16.65% {
+		transform: skew(-12deg);
+	}
+
+	33.3% {
+		transform: skew(10deg);
+	}
+
+	49.95% {
+		transform: skew(-6deg);
+	}
+
+	66.6% {
+		transform: skew(4deg);
+	}
+
+	83.25% {
+		transform: skew(-2deg);
+	}
+
+	100% {
+		transform: skew(0);
+	}
+}
+
+
+/* Wobble To Bottom Right */
+@keyframes hvr-wobble-to-bottom-right {
+  16.65% {
+    -webkit-transform: translate(8px, 8px);
+    transform: translate(8px, 8px);
   }
-  50% {
-      transform: scaleY(.8);
+  33.3% {
+    -webkit-transform: translate(-6px, -6px);
+    transform: translate(-6px, -6px);
+  }
+  49.95% {
+    -webkit-transform: translate(4px, 4px);
+    transform: translate(4px, 4px);
+  }
+  66.6% {
+    -webkit-transform: translate(-2px, -2px);
+    transform: translate(-2px, -2px);
+  }
+  83.25% {
+    -webkit-transform: translate(1px, 1px);
+    transform: translate(1px, 1px);
   }
   100% {
-      transform: scale(1);
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
+}
 
+/* Wobble Horizontal */
+@keyframes wobble-horizontal {
+	16.65% {
+		transform: translateX(8px);
+	}
+
+	33.3% {
+		transform: translateX(-6px);
+	}
+
+	49.95% {
+		transform: translateX(4px);
+	}
+
+	66.6% {
+		transform: translateX(-2px);
+	}
+
+	83.25% {
+		transform: translateX(1px);
+	}
+
+	100% {
+		transform: translateX(0);
+	}
 }
