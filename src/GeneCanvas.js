@@ -14,7 +14,7 @@ class App extends Component {
         current: "",
         drawing: true,
         pickenImages: "",
-        numberOfCanvases: 1
+        numberOfCanvases: 10
       };
 
       this._onMouseMove = this._onMouseMove.bind(this);
@@ -50,6 +50,7 @@ class App extends Component {
             this.setState({
               pickenImages: results[0]
             })
+            console.log("here", results);
             this.populateImage();
           })
       }
@@ -112,7 +113,7 @@ class App extends Component {
      this.setState({
        pickenImages: data
      })
-     
+
      // fetch('/sendPic', {
      //   method: 'POST',
      //   body: JSON.stringify(data),
