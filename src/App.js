@@ -14,7 +14,6 @@ class App extends Component {
           data: [],
           headerData: []
       };
-      this.sectionHeight = React.createRef()
     }
 
     componentDidMount(){
@@ -74,12 +73,13 @@ class App extends Component {
     }
     const whiteBackgroundBlocs = {
       backgroundColor: "white"
-    }
+    };
     const whiteBackgroundBlocsH1 = {
       color: this.state.pickenColour
-    }
+    };
+
     const whiteBackgroundBlocsSpans = {
-      color: this.state.pickenColour
+      color: this.state.pickenColour,
     }
 
     const test = {
@@ -90,27 +90,30 @@ class App extends Component {
     var items = this.state.data.map((item, i) => {
 
 
-      console.log("this is the item", item);
-
       const stringToArray = item.name.split("");
-      const newArray = [];
+      const newArrayNames = [];
+      const classNameList = ["hvr-wobble-horizontal", "shrink"];
 
-
-      function makeRandomAnims(){
-         stringToArray.map((item, i) => {
-          newArray.push(<span key={i} >{item}</span>)
-        })
-        console.log("this is the new array", newArray);
-        console.log("--->", newArray.length);
+      function returnRandomAnims(){
+        return classNameList[Math.floor(Math.random() * classNameList.length)];
       }
 
-      makeRandomAnims();
+      console.log("---->", returnRandomAnims());
+
+
+      function convertToSpans(){
+         stringToArray.map((item, i) => {
+          newArrayNames.push(<span key={i} className={returnRandomAnims()}>{item}</span>)
+        })
+      }
+
+      convertToSpans();
 
       if(i % 2 === 0){
         return (
 
                <section key={i} className="main_sections">
-                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{newArray}
+                      <h1 key={i+1*1} style={whiteBackgroundBlocsH1}>{newArrayNames}
                         <span style={whiteBackgroundBlocsSpans}>{item.blury_text}</span>{item.name_end}
                       </h1>
                 </section>
@@ -120,9 +123,10 @@ class App extends Component {
         return (
 
                <section key={i} className="main_sections" style={coloredBackgroundBlocs}>
-                      <h1 key={i+1*1} style={coloredBackgroundBlocsH1}>{item.name}
-                          <span style={coloredBackgroundBlocsSpans}>{item.blury_text}</span>{item.name_end}
+                      <h1 key={i+1*1} style={coloredBackgroundBlocsH1}>{newArrayNames}
+                          <span style={coloredBackgroundBlocsSpans}>{item.blury_text}</span> {item.name_end}
                        </h1>
+                       
                 </section>
               )
       }
@@ -156,7 +160,6 @@ class App extends Component {
       if(i%2){
         return (
           <span key={i+1*2}
-          ref={this.myDiv}
           style={coloredBackgroundHeader}>
             {item.name}
           </span>
@@ -164,8 +167,7 @@ class App extends Component {
       }else{
         return (
             <span key={i+2*4}
-            style={whiteBackgroundHeader}
-            ref={this.myDiv}>
+            style={whiteBackgroundHeader}>
               {item.name}
             </span>
         )

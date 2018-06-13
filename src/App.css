@@ -13,7 +13,7 @@ body{
 }
 
 .main_container h1{
-  font-size: 21vw;
+  font-size: 19.5vw;
   font-family: TimesNewRoman;
   margin: 0;
   font-weight: lighter;
@@ -79,18 +79,36 @@ body{
   margin: 0;
   text-shadow: 1px 2px 20px black;
   margin-left: 2vw;
-  -webkit-animation: moving_secondDesc 10s infinite;
-  animation: moving_secondDesc 10s infinite;
-  font-family: "Arial Narrow", Arial, sans-serif;
   text-decoration: none;
 }
 
 span{
   font-family: TimesNewRoman;
   font-weight: bold;
-  /* text-shadow: 0 0 44px white; */
   -webkit-text-stroke: 0;
 }
+
+
+.hvr-wobble-horizontal{
+  font-family: TimesNewRoman;
+  font-weight: lighter;
+  animation-name: wobble-horizontal;
+  animation-duration: 4s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  display: inline-block;
+}
+
+.hvr-wobble-top{
+  font-family: TimesNewRoman;
+  font-weight: lighter;
+  animation-name: wobble-top;
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count:infinite;
+  display: inline-block;
+}
+
 
 
 .canvas:last-child{
@@ -102,7 +120,7 @@ span{
   margin: 0;
   position: absolute;
   width: 100vw;
-  height: 116.6vh;
+  height: 108.6vh;
   display: block;
   z-index: 1;
 }
@@ -142,15 +160,62 @@ span{
   }
 }
 
-@keyframes moving_secondDesc {
-  0% {
-      transform: scale(1);
-  }
-  50% {
-      transform: scaleY(.8);
-  }
-  100% {
-      transform: scale(1);
-  }
 
+
+
+/* Wobble Horizontal */
+@keyframes wobble-horizontal {
+	16.65% {
+		transform: translateX(8px);
+	}
+
+	33.3% {
+		transform: translateX(-6px);
+	}
+
+	49.95% {
+		transform: translateX(4px);
+	}
+
+	66.6% {
+		transform: translateX(-2px);
+	}
+
+	83.25% {
+		transform: translateX(1px);
+	}
+
+	100% {
+		transform: translateX(0);
+	}
+}
+
+
+
+
+/* Wobble Top */
+@keyframes wobble-top {
+	16.65% {
+		transform: skew(-12deg);
+	}
+
+	33.3% {
+		transform: skew(10deg);
+	}
+
+	49.95% {
+		transform: skew(-6deg);
+	}
+
+	66.6% {
+		transform: skew(4deg);
+	}
+
+	83.25% {
+		transform: skew(-2deg);
+	}
+
+	100% {
+		transform: skew(0);
+	}
 }
