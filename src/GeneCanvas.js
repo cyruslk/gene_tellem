@@ -55,7 +55,6 @@ class App extends Component {
     populateImage(){
 
       console.log(this.state.pickenImages, "---->");
-
       if(this.state.populate){
         // console.log("HERE!", this.state.pickenImages);
         const img = new Image();

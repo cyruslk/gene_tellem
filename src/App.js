@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GeneCanvas from './GeneCanvas.js';
 import './App.css';
 import fetch from 'node-fetch';
+import { Shake } from 'reshake';
 
 
 class App extends Component {
@@ -71,11 +72,11 @@ class App extends Component {
       backgroundColor: "white"
     };
     const whiteBackgroundBlocsH1 = {
-      color: this.state.pickenColour
+      color: "black"
     };
 
     const whiteBackgroundBlocsSpans = {
-      color: this.state.pickenColour
+      color: "black"
     }
 
 
@@ -88,12 +89,8 @@ class App extends Component {
       const newArrayName = [];
       const newArrayBluryText = [];
 
-
-      // to optimize
       const classNameList = ["hvr-wobble-horizontal", "regular-span"];
       const classNameListFilter = ["hvr-wobble-horizontal", "regular-span"];
-
-
 
       function convertToSpans(oldArray, newArray, animArray){
 
@@ -146,17 +143,9 @@ class App extends Component {
     var resultsRender = [];
     for (var i = 0; i < items.length; i++) {
       resultsRender.push(items[i]);
-
       console.log(i, items[i]);
-
       console.log();
 
-      // if (i % 2 === 0) {
-      //   console.log("---");
-      //   resultsRender.push(
-      //     <GeneCanvas key={i+4*4} className="canvas"/>
-      //   );
-      // }
     }
 
 

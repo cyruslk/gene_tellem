@@ -12,9 +12,10 @@ const spreadsheetURL = preFix+sheetID+postFix;
 
 const mongouri = process.env.MONGODB_URI || CONFIG.MONGODB_URI;
 const dbName = process.env.DB_NAME || CONFIG.DB_NAME;
-const collectionName = process.env.COLLECTION_NAME || CONFIG.COLLECTION_NAME;
+const collectionName_black = process.env.COLLECTION_NAME_BLACK || CONFIG.COLLECTION_NAME_BLACK;
 
-const dbLayer = require('./dbLayer')(mongouri, dbName, collectionName);
+
+const dbLayerBlack = require('./dbLayer')(mongouri, dbName, collectionName_black);
 
 app.use(express.static(__dirname + '/public'));
 app.all('*', function(req, res, next) {
@@ -66,14 +67,14 @@ app.get("/cms-data-header", (req, res) => {
 
 app.post('/sendPic', (req, res) => {
   console.log(req.body);
-  dbLayer.putOne(req.body.data)
+  dbLayerBlack.putOne(req.body.data)
     .then(() => {
       res.sendStatus(200);
     });
 })
 
 app.get('/random/:number', (req, res) => {
-  dbLayer.getRandoms(req.params.number)
+  dbLayerBlack.getRandoms(req.params.number)
     .then((result) => {
       res.send(result);
     })
