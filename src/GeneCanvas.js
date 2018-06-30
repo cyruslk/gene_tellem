@@ -81,7 +81,6 @@ class App extends Component {
     }
 
     _onMouseDown(e){
-      // this.state.drawing = true;
       const current = this.state.current;
       current.x = e.clientX;
       current.y = e.clientY;

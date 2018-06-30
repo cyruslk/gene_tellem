@@ -14,7 +14,6 @@ const mongouri = process.env.MONGODB_URI || CONFIG.MONGODB_URI;
 const dbName = process.env.DB_NAME || CONFIG.DB_NAME;
 const collectionName_black = process.env.COLLECTION_NAME_BLACK || CONFIG.COLLECTION_NAME_BLACK;
 
-
 const dbLayerBlack = require('./dbLayer')(mongouri, dbName, collectionName_black);
 
 app.use(express.static(__dirname + '/public'));
