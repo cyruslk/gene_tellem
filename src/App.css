@@ -1,18 +1,26 @@
-*::selection {
+/* *::selection {
     background-color: #000;
     color: #fff;
+} */
+
+html {
+  background-color: white;
 }
 
-html{
-  background-color: black;
-}
-
-body{
+body {
   background-color: white;
   overflow-x: hidden;
 }
 
-.main_container h1{
+.main_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.main_container h1 {
   font-size: 19.5vw;
   font-family: TimesNewRoman;
   margin: 0;
@@ -22,16 +30,16 @@ body{
   z-index: 100;
 }
 
-.main_container section{
+.main_container section {
   position: relative;
 }
 
-.resultsRender_container{
+.resultsRender_container {
   padding-top: 7vw;
 }
 
 
-.main_container header{
+.main_container header {
   margin-bottom: 3vw;
   display: flex;
   padding-left: 2vw;
@@ -45,7 +53,7 @@ body{
   z-index: 100000;
   }
 
-.main_container header span{
+.main_container header span {
   filter: none;
   text-shadow: none;
   font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
@@ -57,12 +65,13 @@ body{
   font-weight: lighter;
 }
 
-.main_sections header{
+.main_sections header {
   margin: 1vw;
   align-items: center;
   justify-content: center;
   font-size: 2.4vw;
   border-radius: 20px;
+  top: 0;
   right: 0;
   padding: 0.5vw;
   position: absolute;
@@ -74,7 +83,7 @@ body{
 }
 
 .main_sections p,
-.main_sections a{
+.main_sections a {
   font-size: 2.5vw;
   color: black;
   width: 94vw;
@@ -84,14 +93,14 @@ body{
   text-decoration: none;
 }
 
-span{
+span {
   font-family: TimesNewRoman;
   font-weight: bold;
   -webkit-text-stroke: 0;
 }
 
 
-.hvr-wobble-horizontal{
+.hvr-wobble-horizontal {
   font-family: TimesNewRoman;
   font-weight: lighter;
   animation-name: wobble-horizontal;
@@ -101,7 +110,7 @@ span{
   display: inline-block;
 }
 
-.hvr-wobble-top{
+.hvr-wobble-top {
   animation-name: wobble-top;
   animation-duration: 6s;
   animation-timing-function: ease-in-out;
@@ -109,13 +118,13 @@ span{
   display: inline-block;
 }
 
-.slider_canvas{
+.slider_canvas {
   position: fixed;
   top: 0;
 }
 
 
-.hvr-wobble-to-bottom-right{
+.hvr-wobble-to-bottom-right {
   animation-name: hvr-wobble-to-bottom-right;
   animation-duration: 10s;
   animation-timing-function: ease-in-out;
@@ -126,11 +135,11 @@ span{
 }
 
 
-.canvas:last-child{
+.canvas:last-child {
   background-color: transparent;
 }
 
-.canvas{
+.canvas {
   background-color: transparent;
   margin: 0;
   position: absolute;
@@ -139,14 +148,14 @@ span{
   display: block;
 }
 
-.canvas_fixed{
+.canvas_fixed {
   position: fixed;
   top: 0;
   width: 100vw;
   height: 100vh;
 }
 
-.loader_screen_container{
+.loader_screen_container {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -154,7 +163,7 @@ span{
   justify-content: center;
 }
 
-.loader_screen{
+.loader_screen {
   width: 90vw;
   height: 90vh;
   position: absolute;
