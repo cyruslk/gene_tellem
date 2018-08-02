@@ -10,25 +10,34 @@ class App extends Component {
     super(props);
 
     this.state = {
-      pickenColour: '',
       data: [],
       headerData: [],
+      color: [],
     };
   }
 
   componentDidMount() {
+
+    const color = getRandomColor();
     fetch('/cms-data')
       .then((res) => { return res.json(); })
       .then((responseJson) => {
         const dataWithColors = responseJson.map((item) => {
-          const color = getRandomColor();
-          const colorString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`;
-          const backgroundColorString = `rgba(${color[0]}, ${color[1]}, ${color[2]})`;
+          const colorString1 = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+          const colorString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`;
+          const backgroundColorString = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+          this.setState({
+            colorString: colorString
+          })
+          this.setState({
+            backgroundColorString: backgroundColorString
+          })
           const colorDbCollectionName = color.join('');
           return {
             ...item,
-            backgroundColorString,
-            colorString,
+             backgroundColorString,
+             colorString1,
+             colorString,
             colorDbCollectionName,
           };
         });
@@ -40,6 +49,7 @@ class App extends Component {
     fetch('/cms-data-header')
       .then((res) => { return res.json(); })
       .then((responseJson) => {
+        // console.log("this is the header ->", responseJson);
         this.setState({
           headerData: responseJson,
         });
@@ -54,22 +64,22 @@ class App extends Component {
       color: 'white',
     };
     const whiteBackgroundBlocsH1 = {
-      color: 'black',
+      color: this.state.backgroundColorString,
     };
     const whiteBackgroundBlocsSpans = {
-      color: 'black',
+      color: 'white',
     };
 
-    const { data, headerData, } = this.state;
-    const items = data.map((item, i) => {
+      const { data, headerData, } = this.state;
+      const items = data.map((item, i) => {
       const stringToArrayName = item.name.split('');
       const stringToArrayBluryText = item.name_end.split(' ');
 
       const newArrayName = [];
       const newArrayBluryText = [];
 
-      const classNameList = ['hvr-wobble-horizontal', 'regular-span'];
-      const classNameListFilter = ['hvr-wobble-horizontal', 'regular-span'];
+      const classNameList = ['shake-slow', 'regular-span'];
+      const classNameListFilter = ['shake-slow', 'regular-span'];
 
       function convertToSpans(oldArray, newArray, animArray) {
         function returnRandomAnims(selectedAnimArray) {
@@ -88,45 +98,54 @@ class App extends Component {
 
       if (i % 2 === 0) {
         return (
-          <section key={i} className="main_sections">
-            <h1 key={i + 1 * 1} style={whiteBackgroundBlocsH1}>
+
+          <section
+            key={i}
+            className="main_sections"
+            style={{
+              backgroundColor: item.backgroundColorString,
+            }}
+          >
+            <h1 key={i + 1 * 1} style={coloredBackgroundBlocsH1}>
               {newArrayName}
-              <span style={whiteBackgroundBlocsSpans}>
+              <span style={coloredBackgroundBlocsSpans}>
                 {item.blury_text}
               </span>
               {newArrayBluryText}
             </h1>
             <GeneCanvas
               key={i + 4 * 4}
-              zIndex={1000}
-              colorString="rgba(0, 0, 0, 0.5)"
+              zIndex={100}
+              position={"absolute"}
+              shouldDraw={false}
+              colorString= {this.state.colorString}
               colorDbCollectionName="000"
             />
+            <a className="block_links shake" style={coloredBackgroundBlocsSpans}
+              href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
           </section>
         );
       }
       return (
-        <section
-          key={i}
-          className="main_sections"
-          style={{
-            backgroundColor: item.backgroundColorString,
-          }}
-        >
-          <h1 key={i + 1 * 1} style={coloredBackgroundBlocsH1}>
+        <section key={i} className="main_sections">
+          <h1 key={i + 1 * 1} style={whiteBackgroundBlocsH1}>
             {newArrayName}
-            <span style={coloredBackgroundBlocsSpans}>
+            <span style={whiteBackgroundBlocsSpans}>
               {item.blury_text}
             </span>
-            {' '}
             {newArrayBluryText}
           </h1>
           <GeneCanvas
             key={i + 4 * 4}
-            zIndex={1000}
-            colorString={item.colorString}
-            colorDbCollectionName={item.colorDbCollectionName}
+            zIndex={10000}
+            position={"absolute"}
+            shouldDraw={false}
+            background={false}
+            colorString= {this.state.colorString}
+            colorDbCollectionName="000"
           />
+          <a className="block_links shake" style={whiteBackgroundBlocsH1}
+          href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
         </section>
       );
     });
@@ -134,13 +153,12 @@ class App extends Component {
     const resultsRender = [];
     for (let i = 0; i < items.length; i += 1) {
       resultsRender.push(items[i]);
-      // console.log(i, items[i]);
-    }
+      }
 
 
     const coloredBackgroundHeader = {
       color: 'white',
-      backgroundColor: this.state.pickenColour,
+      backgroundColor: this.state.backgroundColorString,
       border: 'none',
     };
 
@@ -149,13 +167,16 @@ class App extends Component {
       backgroundColor: 'white',
     };
 
+
     const itemHeader = headerData.map((item, i) => {
       if (i % 2) {
         return (
           <span key={i + 1 * 2}
             style={coloredBackgroundHeader}
           >
+          <a href={item.link} target="_blank">
             {item.name}
+          </a>
           </span>
         );
       }
@@ -163,7 +184,9 @@ class App extends Component {
         <span key={i + 2 * 4}
           style={whiteBackgroundHeader}
         >
+        <a href={item.link} target="_blank">
           {item.name}
+        </a>
         </span>
       );
     });
@@ -176,20 +199,39 @@ class App extends Component {
 
     if (data.length < 1) {
       return (
-        <div className="loader_screen_container" style={coloredBackgroundHeader}>
-          <div className="loader_screen" />
+        <div className="loader_screen_container">
+        <div className="loader_span_container shake-little">
+              <span>LOADING</span>
+            </div>
         </div>
-
       );
     }
     return (
+      <div>
+      <div className="loader_screen_container canvas_loader">
+      <div className="loader_span_container shake-little">
+            <span>LOADING</span>
+          </div>
+      </div>
       <div className="main_container">
         <header>
           {resultsRenderHeader}
         </header>
         <div className="resultsRender_container">
+        <GeneCanvas
+          key={4 * 4}
+          zIndex={1}
+          shouldDraw={false}
+          position={"fixed"}
+          colorString="rgba(0, 0, 0, 0.5)"
+          colorDbCollectionName="000"
+        />
           {resultsRender}
         </div>
+        <section className="credits">
+          code & design ---> &nbsp; <a href="http://www.c-t-l-k.com" target="_blank" rel="noopener noreferrer">www.c-t-l-k.com</a> &nbsp; (+ thanks to Conan Lai )
+        </section>
+      </div>
       </div>
     );
   }

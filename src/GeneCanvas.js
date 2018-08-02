@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import is from "is_js";
 
 class App extends Component {
   constructor(props) {
@@ -8,7 +9,11 @@ class App extends Component {
     this.container = React.createRef();
     this.state = {
       pickenImages: '',
-      hasMousedOver: false,
+      hasMousedOver: true,
+      shouldDraw: this.props.shouldDraw,
+      shouldDisplayBackground: this.props.background,
+      chromeOrFirefox: true,
+      lineWidth: 400
     };
   }
 
@@ -17,7 +22,18 @@ class App extends Component {
     window.addEventListener('resize', this.throttledSetCanvasSize);
     // this.getCanvas();
     this.fetchImages();
+
+    const isSafari = is.safari();
+    if(isSafari === true){
+      console.log("on safari");
+      this.setState({
+        lineWidth: 0,
+        chromeOrFirefox: false
+      })
+    }
   }
+
+
 
   setCanvasSize = () => {
     const container = this.container.current;
@@ -48,7 +64,9 @@ class App extends Component {
         this.setState({
           pickenImages: results[0],
         });
-        this.populateImage();
+        if(this.state.shouldDisplayBackground !== false){
+          this.populateImage();
+        }
       });
   }
 
@@ -61,19 +79,25 @@ class App extends Component {
     };
   }
 
-  drawLine(x0, y0, x1, y1, color) {
-    const context = this.canvas.current.getContext('2d');
-    context.beginPath();
-    context.moveTo(x0, y0);
-    context.lineTo(x1, y1);
-    context.strokeStyle = color;
-    context.lineWidth = 200;
-    context.lineCap = 'round';
-    context.lineJoin = 'round';
-    context.filter = 'blur(20px)';
-    context.stroke();
-    context.closePath();
-  }
+
+
+    drawLine(x0, y0, x1, y1, color) {
+      if(this.state.chromeOrFirefox === true){
+        const context = this.canvas.current.getContext('2d');
+        context.beginPath();
+        context.moveTo(x0, y0);
+        context.lineTo(x1, y1);
+        context.strokeStyle = color;
+        context.lineWidth = this.state.lineWidth;
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
+        context.filter = 'blur(20px)';
+        context.stroke();
+        context.closePath();
+      }else{
+        return;
+      }
+    }
 
   _onMouseOut = (e) => {
     this.createImage();
@@ -92,8 +116,10 @@ class App extends Component {
     this.current = currentCoords;
   }
 
+
   _onMouseOver = (e) => {
-    if (!this.state.hasMousedOver) {
+    if (!this.state.hasMousedOver
+        && this.state.shouldDraw) {
       const canvas = this.canvas.current;
       const context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -141,6 +167,7 @@ class App extends Component {
       zIndex: this.props.zIndex,
       height: '100%',
       width: '100%',
+      position: this.props.position
     };
 
     return (

@@ -1,8 +1,3 @@
-/* *::selection {
-    background-color: #000;
-    color: #fff;
-} */
-
 html {
   background-color: white;
 }
@@ -10,6 +5,28 @@ html {
 body {
   background-color: white;
   overflow-x: hidden;
+}
+
+*{
+    outline:none;
+    -webkit-touch-callout: none; /* iOS Safari */
+   -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Firefox */
+       -ms-user-select: none; /* Internet Explorer/Edge */
+           user-select: none; /* Non-prefixed version, currently
+                                 supported by Chrome and Opera */
+}
+
+a,
+a:visited,
+a:active{
+  color: inherit;
+  text-decoration: none;
+}
+
+*:focus {
+    outline:none;
 }
 
 .main_container {
@@ -25,17 +42,24 @@ body {
   font-family: TimesNewRoman;
   margin: 0;
   font-weight: lighter;
-  line-height: 90%;
+  line-height: 95%;
   position: relative;
-  z-index: 100;
+  z-index: 1000;
+  margin-bottom: 3vw;
+  word-break: break-word;
 }
 
 .main_container section {
   position: relative;
 }
 
+
+.main_container section:first-child{
+  padding-top: 8vw;
+}
+
 .resultsRender_container {
-  padding-top: 7vw;
+  /* padding-top: 7vw; */
 }
 
 
@@ -82,21 +106,29 @@ body {
   display: none;
 }
 
-.main_sections p,
-.main_sections a {
-  font-size: 2.5vw;
-  color: black;
-  width: 94vw;
-  margin: 0;
-  text-shadow: 1px 2px 20px black;
-  margin-left: 2vw;
-  text-decoration: none;
+.main_sections:first-child{
+  padding-top: 3vw;
+}
+
+.main_sections{
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: 6vw;
+    padding-bottom: 6vw;
+
+}
+
+.arrows{
+  font-size: 4vw;
+  z-index: 1000000000000000;
+  position: absolute;
 }
 
 span {
   font-family: TimesNewRoman;
   font-weight: bold;
   -webkit-text-stroke: 0;
+  display: inline-block;
 }
 
 
@@ -118,11 +150,6 @@ span {
   display: inline-block;
 }
 
-.slider_canvas {
-  position: fixed;
-  top: 0;
-}
-
 
 .hvr-wobble-to-bottom-right {
   animation-name: hvr-wobble-to-bottom-right;
@@ -142,9 +169,8 @@ span {
 .canvas {
   background-color: transparent;
   margin: 0;
-  position: absolute;
   width: 100vw;
-  height: 100%;
+  height: 110%;
   display: block;
 }
 
@@ -161,91 +187,331 @@ span {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.loader_screen {
-  width: 90vw;
-  height: 90vh;
-  position: absolute;
+  flex-direction: column;
+  overflow: hidden;
   background-color: white;
-  animation: flash_loader .5s infinite;
-  border-radius: 50%;
-  box-shadow: 10px 10px 51px 0px rgba(0,0,0,0.75);
-  border: none;
 }
 
 
-@keyframes flash_loader {
+.loader_span_container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+}
+
+
+.loader_span_container span{
+  font-size: 6vw;
+  font-family: times;
+  color: black;
+  font-weight: lighter;
+}
+
+
+.canvas_loader{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  z-index: 1000000;
+  animation: canvas_loader 2s forwards, zIndex_loader 2s forwards;
+}
+
+
+.block_links{
+  z-index: 10000;
+  bottom: 0;
+  font-size: 6vw;
+  position: relative;
+  font-family: times;
+  font-weight: lighter;
+}
+
+.credits{
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000000000000;
+  color: white;
+  font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+  font-size: 1.2vw;
+  opacity: 0.2;
+  padding-bottom: 3vw;
+}
+
+
+/* Landscape */
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+    .resultsRender_container{
+      padding-top: 10vw;
+      overflow-x: hidden;
+      left: 0;
+      width: 100vw;
+    }
+    .main_container header span{
+      padding: 10px;
+      font-size: 3vw;
+      font-family: arial;
+      font-weight: bolder;
+      color: white;
+      background-color: transparent;
+      border: none;
+      margin-bottom: 2vw;
+    }
+
+
+      .credits{
+        flex-direction: column;
+        font-size: 2.3vw;
+        padding-bottom: 3vw;
+        font-family: arial;
+        font-weight: bolder;
+      }
+
+}
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+
+  html {
+    background-color: white;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  body{
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+
+  .main_container header{
+    position: absolute;
+    display: inline-block;
+    background-color: black;
+    height: 20vh;
+    z-index: -1;
+  }
+
+  .main_container header span{
+    padding: 10px;
+    font-size: 6vw;
+    font-family: arial;
+    font-weight: bolder;
+    color: white;
+    background-color: transparent;
+    border: none;
+    margin-bottom: 2vw;
+  }
+
+  .resultsRender_container{
+    padding-top: 31vw;
+    overflow-x: hidden;
+    left: 0;
+    width: 100vw;
+  }
+
+  .main_container h1{
+    line-height: 100%;
+    font-size: 20vw;
+    z-index: 10000;
+    padding-left: 2vw;
+  }
+
+  canvas{
+    display: none;
+  }
+
+  .credits{
+    flex-direction: column;
+    font-size: 3.2vw;
+    padding-bottom: 3vw;
+    font-family: arial;
+    font-weight: bolder;
+  }
+
+
+
+
+
+}
+
+
+/* IPAD PORTRAIT */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : portrait) {
+
+
+.main_container header span{
+  font-size: 3vw;
+}
+
+.main_container header span{
+  padding: 10px;
+  font-family: arial;
+  font-weight: bolder;
+  color: white;
+  background-color: transparent;
+  border: none;
+  margin-bottom: 2vw;
+}
+
+.resultsRender_container{
+  padding-top: 5vw;
+  overflow-x: hidden;
+  left: 0;
+  width: 100vw;
+}
+
+.main_sections{
+  padding-top: 10vw;
+}
+
+.main_container h1{
+  line-height: 100%;
+  font-size: 16.5vw;
+  z-index: 10000;
+  padding-left: 4vw;
+}
+
+.credits{
+  flex-direction: column;
+  font-size: 2vw;
+  padding-bottom: 3vw;
+  font-family: arial;
+  font-weight: bolder;
+}
+
+
+}
+
+
+
+/* IPAD Landscape */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : landscape) {
+
+  .main_container header span{
+    padding: 10px;
+    font-family: arial;
+    font-weight: bolder;
+    color: white;
+    background-color: transparent;
+    border: none;
+    margin-bottom: 2vw;
+  }
+
+  .resultsRender_container{
+    padding-top: 4vw;
+    overflow-x: hidden;
+    left: 0;
+    width: 100vw;
+  }
+
+  .credits{
+    font-size: 1.5vw;
+    padding-bottom: 3vw;
+    font-family: arial;
+    font-weight: bolder;
+  }
+
+
+}
+
+
+/* @keyframes flash_loader {
   0%, 50%, 100%{
     opacity: 1;
   }25%, 75%{
     opacity: .5;
   }
-}
+} */
 
 
 
 
 /* Wobble Horizontal */
-@keyframes wobble-horizontal {
-	16.65% {
-		transform: translateX(8px);
-	}
+/* @keyframes wobble-horizontal {
+  16.65% {
+    transform: translateX(8px);
+  }
 
-	33.3% {
-		transform: translateX(-6px);
-	}
+  33.3% {
+    transform: translateX(-6px);
+  }
 
-	49.95% {
-		transform: translateX(4px);
-	}
+  49.95% {
+    transform: translateX(4px);
+  }
 
-	66.6% {
-		transform: translateX(-2px);
-	}
+  66.6% {
+    transform: translateX(-2px);
+  }
 
-	83.25% {
-		transform: translateX(1px);
-	}
+  83.25% {
+    transform: translateX(1px);
+  }
 
-	100% {
-		transform: translateX(0);
-	}
-}
+  100% {
+    transform: translateX(0);
+  }
+} */
 
 
 
 
 /* Wobble Top */
-@keyframes wobble-top {
-	16.65% {
-		transform: skew(-12deg);
-	}
+/* @keyframes wobble-top {
+  16.65% {
+    transform: skew(-12deg);
+  }
 
-	33.3% {
-		transform: skew(10deg);
-	}
+  33.3% {
+    transform: skew(10deg);
+  }
 
-	49.95% {
-		transform: skew(-6deg);
-	}
+  49.95% {
+    transform: skew(-6deg);
+  }
 
-	66.6% {
-		transform: skew(4deg);
-	}
+  66.6% {
+    transform: skew(4deg);
+  }
 
-	83.25% {
-		transform: skew(-2deg);
-	}
+  83.25% {
+    transform: skew(-2deg);
+  }
 
-	100% {
-		transform: skew(0);
-	}
-}
+  100% {
+    transform: skew(0);
+  }
+} */
 
 
 /* Wobble To Bottom Right */
-@keyframes hvr-wobble-to-bottom-right {
+/* @keyframes hvr-wobble-to-bottom-right {
   16.65% {
     -webkit-transform: translate(8px, 8px);
     transform: translate(8px, 8px);
@@ -270,4 +536,17 @@ span {
     -webkit-transform: translate(0, 0);
     transform: translate(0, 0);
   }
+} */
+
+
+@keyframes canvas_loader {
+  0%   {opacity: 1;}
+   90%  {opacity: 1;}
+   100% {opacity: 0;}
+}
+
+@keyframes zIndex_loader {
+  0%   {z-index: 1000000;}
+  90%   {z-index: 1000000;}
+  100%   {z-index: 0;}
 }

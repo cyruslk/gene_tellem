@@ -9,7 +9,7 @@ module.exports = (url, dbName, collectionName) => {
     console.log('connected successfully to db');
     db = client.db(dbName);
   });
-  
+
   const putOne = (data) => {
     const payload = {
       data,
@@ -25,7 +25,7 @@ module.exports = (url, dbName, collectionName) => {
         resolve(result.map((item) => {
           return item.data;
         }))
-      });  
+      });
     })
   }
 
