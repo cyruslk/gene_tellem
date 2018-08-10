@@ -8,16 +8,16 @@ const CONFIG = require('./config.js');
 const preFix = "https://spreadsheets.google.com/feeds/list/";
 const sheetID = CONFIG.SHEET_ID;
 const postFix = "/od6/public/values?alt=json"
-const spreadsheetURL = preFix+sheetID+postFix;
+const spreadsheetURL = preFix + sheetID + postFix;
 
 const mongouri = process.env.MONGODB_URI || CONFIG.MONGODB_URI;
 const dbName = process.env.DB_NAME || CONFIG.DB_NAME;
 const collectionName_black = process.env.COLLECTION_NAME_BLACK || CONFIG.COLLECTION_NAME_BLACK;
 
-const dbLayerBlack = require('./dbLayer')(mongouri, dbName, collectionName_black);
+const dbLayer = require('./dbLayer')(mongouri, dbName);
 
 app.use(express.static(__dirname + '/public'));
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -28,56 +28,56 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use(bodyParser.json({ limit: '450kb' }));
-
+app.use(bodyParser.json({ limit: '20mb' }));
 
 app.get("/cms-data", (req, res) => {
   axios.get(spreadsheetURL)
-    .then(response => {
-        var newData = response.data.feed.entry.map(function(ele){
+    .then(response => {
+      var newData = response.data.feed.entry.map(function (ele) {
         return {
-                name: ele.gsx$name.$t,
-                info_secondaire: ele.gsx$infosecondaire.$t,
-                blury_text: ele.gsx$blurytext.$t,
-                name_end: ele.gsx$nameend.$t,
-                link: ele.gsx$link.$t};
-              })
-        res.json(newData);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+          name: ele.gsx$name.$t,
+          info_secondaire: ele.gsx$infosecondaire.$t,
+          blury_text: ele.gsx$blurytext.$t,
+          name_end: ele.gsx$nameend.$t,
+          link: ele.gsx$link.$t
+        };
+      })
+      res.json(newData);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 })
 
 
 app.get("/cms-data-header", (req, res) => {
   axios.get(spreadsheetURL)
-    .then(response => {
+    .then(response => {
       var dataHeader = response.data.feed.entry
-      .map(function(ele){
-         return {name: ele.gsx$headerinfo.$t, link: ele.gsx$headerlink.$t};
-       }).filter(ele => ele.name.length > 0)
-       res.json(dataHeader);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+        .map(function (ele) {
+          return { name: ele.gsx$headerinfo.$t, link: ele.gsx$headerlink.$t };
+        }).filter(ele => ele.name.length > 0)
+      res.json(dataHeader);
+    })
+    .catch(error => {
+      console.log(error);
+    });
 })
 
-app.post('/sendPic', (req, res) => {
+app.post('/sendPic/:color', (req, res) => {
   console.log(req.body);
-  dbLayerBlack.putOne(req.body.data)
+  dbLayer.putOne(req.params.color, req.body.data)
     .then(() => {
       res.sendStatus(200);
     });
 })
 
-app.get('/random/:number', (req, res) => {
-  dbLayerBlack.getRandoms(req.params.number)
+app.get('/random/color/:color', (req, res) => {
+  dbLayer.getRandomByColor(req.params.color)
     .then((result) => {
       res.send(result);
-    })
-})
+    });
+});
 
 app.listen(port, () => {
   console.log('listening on port ' + port)

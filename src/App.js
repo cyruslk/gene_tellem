@@ -12,17 +12,18 @@ class App extends Component {
     this.state = {
       data: [],
       headerData: [],
-      color: [],
+      // color: [],
     };
   }
 
   componentDidMount() {
 
-    const color = getRandomColor();
+
     fetch('/cms-data')
       .then((res) => { return res.json(); })
       .then((responseJson) => {
         const dataWithColors = responseJson.map((item) => {
+          const color = getRandomColor();
           const colorString1 = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
           const colorString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`;
           const backgroundColorString = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
@@ -35,9 +36,9 @@ class App extends Component {
           const colorDbCollectionName = color.join('');
           return {
             ...item,
-             backgroundColorString,
-             colorString1,
-             colorString,
+            backgroundColorString,
+            colorString1,
+            colorString,
             colorDbCollectionName,
           };
         });
@@ -70,8 +71,8 @@ class App extends Component {
       color: 'white',
     };
 
-      const { data, headerData, } = this.state;
-      const items = data.map((item, i) => {
+    const { data, headerData, } = this.state;
+    const items = data.map((item, i) => {
       const stringToArrayName = item.name.split('');
       const stringToArrayBluryText = item.name_end.split(' ');
 
@@ -118,7 +119,7 @@ class App extends Component {
               zIndex={100}
               position={"absolute"}
               shouldDraw={false}
-              colorString= {this.state.colorString}
+              colorString={item.colorString}
               colorDbCollectionName="000"
             />
             <a className="block_links shake" style={coloredBackgroundBlocsSpans}
@@ -128,9 +129,9 @@ class App extends Component {
       }
       return (
         <section key={i} className="main_sections">
-          <h1 key={i + 1 * 1} style={whiteBackgroundBlocsH1}>
+          <h1 key={i + 1 * 1} style={{ color: item.backgroundColorString, }}>
             {newArrayName}
-            <span style={whiteBackgroundBlocsSpans}>
+            <span style={{ color: item.backgroundColorString }}>
               {item.blury_text}
             </span>
             {newArrayBluryText}
@@ -139,13 +140,13 @@ class App extends Component {
             key={i + 4 * 4}
             zIndex={10000}
             position={"absolute"}
-            shouldDraw={false}
+            shouldDraw={true}
             background={false}
-            colorString= {this.state.colorString}
+            colorString={item.colorString}
             colorDbCollectionName="000"
           />
-          <a className="block_links shake" style={whiteBackgroundBlocsH1}
-          href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
+          <a className="block_links shake" style={{ color: item.backgroundColorString }}
+            href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
         </section>
       );
     });
@@ -153,7 +154,7 @@ class App extends Component {
     const resultsRender = [];
     for (let i = 0; i < items.length; i += 1) {
       resultsRender.push(items[i]);
-      }
+    }
 
 
     const coloredBackgroundHeader = {
@@ -174,9 +175,9 @@ class App extends Component {
           <span key={i + 1 * 2}
             style={coloredBackgroundHeader}
           >
-          <a href={item.link} target="_blank">
-            {item.name}
-          </a>
+            <a href={item.link} target="_blank">
+              {item.name}
+            </a>
           </span>
         );
       }
@@ -184,9 +185,9 @@ class App extends Component {
         <span key={i + 2 * 4}
           style={whiteBackgroundHeader}
         >
-        <a href={item.link} target="_blank">
-          {item.name}
-        </a>
+          <a href={item.link} target="_blank">
+            {item.name}
+          </a>
         </span>
       );
     });
@@ -200,38 +201,38 @@ class App extends Component {
     if (data.length < 1) {
       return (
         <div className="loader_screen_container">
-        <div className="loader_span_container shake-little">
-              <span>LOADING</span>
-            </div>
+          <div className="loader_span_container shake-little">
+            <span>LOADING</span>
+          </div>
         </div>
       );
     }
     return (
       <div>
-      <div className="loader_screen_container canvas_loader">
-      <div className="loader_span_container shake-little">
+        <div className="loader_screen_container canvas_loader">
+          <div className="loader_span_container shake-little">
             <span>LOADING</span>
           </div>
-      </div>
-      <div className="main_container">
-        <header>
-          {resultsRenderHeader}
-        </header>
-        <div className="resultsRender_container">
-        <GeneCanvas
-          key={4 * 4}
-          zIndex={1}
-          shouldDraw={false}
-          position={"fixed"}
-          colorString="rgba(0, 0, 0, 0.5)"
-          colorDbCollectionName="000"
-        />
-          {resultsRender}
         </div>
-        <section className="credits">
-          code & design ---> &nbsp; <a href="http://www.c-t-l-k.com" target="_blank" rel="noopener noreferrer">www.c-t-l-k.com</a> &nbsp; (+ thanks to Conan Lai )
+        <div className="main_container">
+          <header>
+            {resultsRenderHeader}
+          </header>
+          <div className="resultsRender_container">
+            <GeneCanvas
+              key={4 * 4}
+              zIndex={1}
+              shouldDraw={false}
+              position={"fixed"}
+              colorString="rgba(0, 0, 0, 0.5)"
+              colorDbCollectionName="000"
+            />
+            {resultsRender}
+          </div>
+          <section className="credits">
+            code & design ---> &nbsp; <a href="http://www.c-t-l-k.com" target="_blank" rel="noopener noreferrer">www.c-t-l-k.com</a> &nbsp; (+ thanks to Conan Lai )
         </section>
-      </div>
+        </div>
       </div>
     );
   }
