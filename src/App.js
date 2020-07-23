@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
-import { Shake } from 'reshake'; // eslint-disable-line no-unused-vars
+import axios from "axios";
+import { Shake } from 'reshake'; // eslint-disable-line no-unused-vars;
+import {
+  Stitch,
+  AnonymousCredential,
+  RemoteMongoClient
+} from "mongodb-stitch-browser-sdk";
+
 import './App.css';
 import GeneCanvas from './GeneCanvas';
 import getRandomColor from './colors';
+
+const CONFIG = require('./config.js');
+const preFix = "https://spreadsheets.google.com/feeds/list/";
+const sheetID = CONFIG.SHEET_ID;
+const postFix = "/od6/public/values?alt=json"
+const spreadsheetURL = preFix+sheetID+postFix;
+const stitchID = CONFIG.STITCH_ID;
+const dbID = CONFIG.DB_ID;
 
 
 class App extends Component {
@@ -10,230 +25,61 @@ class App extends Component {
     super(props);
 
     this.state = {
-      data: [],
-      headerData: [],
-      color: [],
+      dbContent: null,
+      spreadsheetData: null
     };
   }
 
   componentDidMount() {
 
-    const color = getRandomColor();
-    fetch('/cms-data')
-      .then((res) => { return res.json(); })
-      .then((responseJson) => {
-        const dataWithColors = responseJson.map((item) => {
-          const colorString1 = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-          const colorString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`;
-          const backgroundColorString = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-          this.setState({
-            colorString: colorString
-          })
-          this.setState({
-            backgroundColorString: backgroundColorString
-          })
-          const colorDbCollectionName = color.join('');
-          return {
-            ...item,
-             backgroundColorString,
-             colorString1,
-             colorString,
-            colorDbCollectionName,
-          };
-        });
-        this.setState({
-          data: dataWithColors,
-        });
+    this.client = Stitch.initializeDefaultAppClient(stitchID);
+    const mongodb = this.client.getServiceClient(
+      RemoteMongoClient.factory,
+      "mongodb-atlas"
+    );
+    this.db = mongodb.db("gene_db");
+    this.retrieveDataFromDBOnLoad();
+
+    axios.get(spreadsheetURL)
+       .then((response) => {
+         this.setState({
+           spreadsheetData: response.data.feed.entry
+         })
+       }).catch((err) => {
+       console.log(err);
+     });
+   };
+
+
+  retrieveDataFromDBOnLoad = () => {
+   this.client.auth
+     .loginWithCredential(new AnonymousCredential())
+     .then(this.retrieveDataFromDB)
+     .catch(console.error);
+ }
+
+ retrieveDataFromDB = () => {
+    // query the remote DB and update the component state
+    this.db
+      .collection("gene_db_black")
+      .find({}, { limit: 1000 })
+      .asArray()
+      .then(dbContent => {
+        this.setState({dbContent});
       });
-
-    fetch('/cms-data-header')
-      .then((res) => { return res.json(); })
-      .then((responseJson) => {
-        // console.log("this is the header ->", responseJson);
-        this.setState({
-          headerData: responseJson,
-        });
-      });
-
-
-  }
+   }
 
   render() {
-    const coloredBackgroundBlocsH1 = {
-      color: 'white',
-    };
-    const coloredBackgroundBlocsSpans = {
-      color: 'white',
-    };
-    const whiteBackgroundBlocsH1 = {
-      color: this.state.backgroundColorString,
-    };
-    const whiteBackgroundBlocsSpans = {
-      color: 'white',
-    };
-
-      const { data, headerData, } = this.state;
-      const items = data.map((item, i) => {
-      const stringToArrayName = item.name.split('');
-      const stringToArrayBluryText = item.name_end.split(' ');
-
-      const newArrayName = [];
-      const newArrayBluryText = [];
-
-      const classNameList = ['shake-slow', 'regular-span'];
-      const classNameListFilter = ['shake-slow', 'regular-span'];
-
-      function convertToSpans(oldArray, newArray, animArray) {
-        function returnRandomAnims(selectedAnimArray) {
-          return selectedAnimArray[Math.floor(Math.random() * selectedAnimArray.length)];
-        }
-        oldArray.map((oldArrayItem, index) => {
-          return newArray.push(
-            <span key={index} className={returnRandomAnims(animArray)}>
-              {oldArrayItem}
-            </span>
-          );
-        });
-      }
-      convertToSpans(stringToArrayName, newArrayName, classNameList);
-      convertToSpans(stringToArrayBluryText, newArrayBluryText, classNameListFilter);
-
-      if (i % 2 === 0) {
-        return (
-
-          <section
-            key={i}
-            className="main_sections"
-            style={{
-              backgroundColor: item.backgroundColorString,
-            }}
-          >
-            <h1 key={i + 1 * 1} style={coloredBackgroundBlocsH1}>
-              {newArrayName}
-              <span style={coloredBackgroundBlocsSpans}>
-                {item.blury_text}
-              </span>
-              {newArrayBluryText}
-            </h1>
-            <GeneCanvas
-              key={i + 4 * 4}
-              zIndex={100}
-              position={"absolute"}
-              shouldDraw={false}
-              colorString= {this.state.colorString}
-              colorDbCollectionName="000"
-            />
-            <a className="block_links shake" style={coloredBackgroundBlocsSpans}
-              href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
-          </section>
-        );
-      }
+    if(!this.state.dbContent){
       return (
-        <section key={i} className="main_sections">
-          <h1 key={i + 1 * 1} style={whiteBackgroundBlocsH1}>
-            {newArrayName}
-            <span style={whiteBackgroundBlocsSpans}>
-              {item.blury_text}
-            </span>
-            {newArrayBluryText}
-          </h1>
-          <GeneCanvas
-            key={i + 4 * 4}
-            zIndex={10000}
-            position={"absolute"}
-            shouldDraw={false}
-            background={false}
-            colorString= {this.state.colorString}
-            colorDbCollectionName="000"
-          />
-          <a className="block_links shake" style={whiteBackgroundBlocsH1}
-          href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
-        </section>
-      );
-    });
-
-    const resultsRender = [];
-    for (let i = 0; i < items.length; i += 1) {
-      resultsRender.push(items[i]);
-      }
-
-
-    const coloredBackgroundHeader = {
-      color: 'white',
-      backgroundColor: this.state.backgroundColorString,
-      border: 'none',
-    };
-
-    const whiteBackgroundHeader = {
-      color: 'black',
-      backgroundColor: 'white',
-    };
-
-
-    const itemHeader = headerData.map((item, i) => {
-      if (i % 2) {
-        return (
-          <span key={i + 1 * 2}
-            style={coloredBackgroundHeader}
-          >
-          <a href={item.link} target="_blank">
-            {item.name}
-          </a>
-          </span>
-        );
-      }
-      return (
-        <span key={i + 2 * 4}
-          style={whiteBackgroundHeader}
-        >
-        <a href={item.link} target="_blank">
-          {item.name}
-        </a>
-        </span>
-      );
-    });
-
-    const resultsRenderHeader = [];
-    for (let i = 0; i < itemHeader.length; i += 1) {
-      resultsRenderHeader.push(itemHeader[i]);
-    }
-
-
-    if (data.length < 1) {
-      return (
-        <div className="loader_screen_container">
-        <div className="loader_span_container shake-little">
-              <span>LOADING</span>
-            </div>
+        <div>
+          loading
         </div>
-      );
+      )
     }
     return (
       <div>
-      <div className="loader_screen_container canvas_loader">
-      <div className="loader_span_container shake-little">
-            <span>LOADING</span>
-          </div>
-      </div>
-      <div className="main_container">
-        <header>
-          {resultsRenderHeader}
-        </header>
-        <div className="resultsRender_container">
-        <GeneCanvas
-          key={4 * 4}
-          zIndex={1}
-          shouldDraw={false}
-          position={"fixed"}
-          colorString="rgba(0, 0, 0, 0.5)"
-          colorDbCollectionName="000"
-        />
-          {resultsRender}
-        </div>
-        <section className="credits">
-          code & design ---> &nbsp; <a href="http://www.c-t-l-k.com" target="_blank" rel="noopener noreferrer">www.c-t-l-k.com</a> &nbsp; (+ thanks to Conan Lai )
-        </section>
-      </div>
+        fvdvvdv
       </div>
     );
   }
