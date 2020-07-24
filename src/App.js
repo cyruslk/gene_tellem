@@ -71,16 +71,14 @@ class App extends Component {
       colorDbCollectionName
     };
 
-    this.setState({
-      data: dataWithColors,
-    });
-   })
-     }).catch((err) => {
-     console.log(err);
-   });
+      this.setState({
+        data: dataWithColors,
+      });
+     })
+       }).catch((err) => {
+       console.log(err);
+     });
    };
-
-
 
   retrieveDataFromDBOnLoad = () => {
    this.client.auth
@@ -127,14 +125,7 @@ class App extends Component {
         </div>
       )
     }
-
-    // let populatePage = this.state.spreadsheetData.map((ele, index) => {
-    //   console.log(ele, index);
-    //   return <GeneCanvas index={index} ele={ele} />
-    // })
-
     console.log(this.state);
-
     return (
       <div>
       ---
