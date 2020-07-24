@@ -26,12 +26,18 @@ class App extends Component {
 
     this.state = {
       dbContent: null,
-      spreadsheetData: null
+      spreadsheetData: null,
+      data: [],
+      headerData: [],
+      color: []
     };
   }
 
   componentDidMount() {
 
+    const color = getRandomColor();
+
+    // init the stitch thing
     this.client = Stitch.initializeDefaultAppClient(stitchID);
     const mongodb = this.client.getServiceClient(
       RemoteMongoClient.factory,
@@ -40,15 +46,40 @@ class App extends Component {
     this.db = mongodb.db("gene_db");
     this.retrieveDataFromDBOnLoad();
 
+    // get from the spreadsheet cms
     axios.get(spreadsheetURL)
-       .then((response) => {
-         this.setState({
-           spreadsheetData: response.data.feed.entry
-         })
-       }).catch((err) => {
-       console.log(err);
-     });
+    .then((response) => {
+
+    // format the data;
+    let dataWithColors = response.data.feed.entry.map(function(ele){
+    const colorString1 = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    const colorString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`;
+    const backgroundColorString = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    const colorDbCollectionName = color.join('');
+    const item = {
+      name: ele.gsx$name.$t,
+      info_secondaire: ele.gsx$infosecondaire.$t,
+      blury_text: ele.gsx$blurytext.$t,
+      name_end: ele.gsx$nameend.$t,
+      link: ele.gsx$link.$t
+    };
+    return {
+      item,
+      backgroundColorString,
+      colorString1,
+      colorString,
+      colorDbCollectionName
+    };
+
+    this.setState({
+      data: dataWithColors,
+    });
+   })
+     }).catch((err) => {
+     console.log(err);
+   });
    };
+
 
 
   retrieveDataFromDBOnLoad = () => {
@@ -70,6 +101,25 @@ class App extends Component {
    }
 
   render() {
+
+
+    const coloredBackgroundBlocsH1 = {
+      color: 'white',
+    };
+    const coloredBackgroundBlocsSpans = {
+      color: 'white',
+    };
+    const whiteBackgroundBlocsH1 = {
+      color: this.state.backgroundColorString,
+    };
+    const whiteBackgroundBlocsSpans = {
+      color: 'white',
+    };
+
+    const classNameList = ['shake-slow', 'regular-span'];
+    const classNameListFilter = ['shake-slow', 'regular-span'];
+
+
     if(!this.state.dbContent){
       return (
         <div>
@@ -77,9 +127,17 @@ class App extends Component {
         </div>
       )
     }
+
+    // let populatePage = this.state.spreadsheetData.map((ele, index) => {
+    //   console.log(ele, index);
+    //   return <GeneCanvas index={index} ele={ele} />
+    // })
+
+    console.log(this.state);
+
     return (
       <div>
-        fvdvvdv
+      ---
       </div>
     );
   }
