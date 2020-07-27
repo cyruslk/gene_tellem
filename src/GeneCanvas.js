@@ -73,7 +73,6 @@ class App extends Component {
   populateImage = () => {
     const img = new Image();
     img.src = this.state.pickenImages;
-    console.log(img.src);
     img.onload = () => {
       const canvas = this.canvas.current;
       canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
