@@ -138,21 +138,33 @@ class App extends Component {
 
       const stringToArrayName = item.item.name.split('');
       const stringToArrayBluryText = item.item.name_end.split(' ');
+
       const newArrayName = [];
       const newArrayBluryText = [];
+
       const classNameList = ['shake-slow', 'regular-span'];
       const classNameListFilter = ['shake-slow', 'regular-span'];
 
       function convertToSpans(oldArray, newArray, animArray) {
+
       function returnRandomAnims(selectedAnimArray) {
         return selectedAnimArray[Math.floor(Math.random() * selectedAnimArray.length)];
       }
+      // might refactor soon ;-);
       oldArray.map((oldArrayItem, index) => {
-        return newArray.push(
-          <span key={index} className={returnRandomAnims(animArray)}>
-            {oldArrayItem}
-          </span>
-        );
+        if(oldArrayItem === " "){
+          return newArray.push(
+            <span key={index}>
+              &nbsp;
+            </span>
+          );
+        }else{
+          return newArray.push(
+            <span key={index} className={returnRandomAnims(animArray)}>
+              {oldArrayItem}
+            </span>
+          );
+        }
       });
     };
 
