@@ -29,7 +29,9 @@ class App extends Component {
       spreadsheetData: null,
       data: [],
       headerData: [],
-      color: []
+      color: [],
+      randomNumberCanvasToReturn: 1,
+      pickenImages: null
     };
   }
 
@@ -49,7 +51,6 @@ class App extends Component {
     );
     this.db = mongodb.db("gene_db");
     this.retrieveDataFromDBOnLoad();
-    this.getRandoms();
 
     // get from the spreadsheet cms
     axios.get(spreadsheetURL)
@@ -106,10 +107,6 @@ class App extends Component {
    };
 
 
-   getRandoms = () => {
-     console.log(this.state);
-   };
-
   retrieveDataFromDBOnLoad = () => {
    this.client.auth
      .loginWithCredential(new AnonymousCredential())
@@ -124,7 +121,9 @@ class App extends Component {
       .find({}, { limit: 1000 })
       .asArray()
       .then(dbContent => {
-        this.setState({dbContent});
+        this.setState({
+          dbContent
+        })
       });
    }
 
@@ -136,7 +135,8 @@ class App extends Component {
     const whiteBackgroundBlocsSpans = { color: 'white' };
     const { data, headerData, } = this.state;
 
-    if(!this.state.data){ return null }
+    if(!this.state.dbContent){ return null }
+
 
     const items = data.map((item, i) => {
 
@@ -212,6 +212,7 @@ class App extends Component {
           background={false}
           colorString= {this.state.colorString}
           colorDbCollectionName="000"
+          dbContent={this.state.dbContent}
         />
         <a className="block_links shake" style={whiteBackgroundBlocsH1}
         href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
@@ -296,6 +297,7 @@ class App extends Component {
         position={"fixed"}
         colorString="rgba(0, 0, 0, 0.5)"
         colorDbCollectionName="000"
+        dbContent={this.state.dbContent}
       />
         {resultsRender}
       </div>

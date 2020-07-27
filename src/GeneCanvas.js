@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import _ from "lodash";
 import './App.css';
-import is from 'is_js';
+import is from "is_js";
 
 class App extends Component {
-  throttledSetCanvasSize = this.throttle(this.setCanvasSize, 200);
-
   constructor(props) {
     super(props);
     this.canvas = React.createRef();
@@ -15,33 +14,28 @@ class App extends Component {
       shouldDraw: this.props.shouldDraw,
       shouldDisplayBackground: this.props.background,
       chromeOrFirefox: true,
-      lineWidth: 400,
+      lineWidth: 400
     };
   }
 
   componentDidMount() {
-
-    console.log(this.props);
-
-
     this.setCanvasSize();
     window.addEventListener('resize', this.throttledSetCanvasSize);
 
-    this.dbColorString = this.props.colorString.slice(5, -1).split(', ').slice(0, 3).join('');
-    // console.log(this.dbColorString, "---");
-
-    if (this.props.shouldDraw === true) {
-      this.fetchImages();
-    }
+    // this.getCanvas();
+    this.fetchImages();
 
     const isSafari = is.safari();
-    if (isSafari === true) {
+    if(isSafari === true){
+      console.log("on safari");
       this.setState({
         lineWidth: 0,
         chromeOrFirefox: false
-      });
+      })
     }
   }
+
+
 
   setCanvasSize = () => {
     const container = this.container.current;
@@ -61,49 +55,51 @@ class App extends Component {
     });
   }
 
+  throttledSetCanvasSize = this.throttle(this.setCanvasSize, 200);
+
   fetchImages() {
-    const url = `/random/color/${this.dbColorString}`;
-    fetch(url)
-      .then((res) => {
-        return res.json();
-      }).then((results) => {
-        if (results.length > 0) {
-          console.log('found image')
-          this.setState({
-            pickenImages: results[0],
-          }, () => {
-            this.populateImage();
-          });
-        }
-      });
+    if(!this.props.dbContent){return null};
+    let numberToFilter = 1;
+    let pickenImages = _.shuffle(this.props.dbContent)[numberToFilter].data;
+    this.setState({
+      pickenImages
+    }, () => {
+      if(this.state.shouldDisplayBackground !== false){
+         this.populateImage();
+       }
+    })
   }
 
   populateImage = () => {
     const img = new Image();
     img.src = this.state.pickenImages;
+    console.log(img.src);
     img.onload = () => {
       const canvas = this.canvas.current;
       canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
     };
   }
 
-  drawLine(x0, y0, x1, y1, color) {
-    if (this.state.chromeOrFirefox === true) {
-      const context = this.canvas.current.getContext('2d');
-      context.beginPath();
-      context.moveTo(x0, y0);
-      context.lineTo(x1, y1);
-      context.strokeStyle = color;
-      context.lineWidth = this.state.lineWidth;
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
-      context.filter = 'blur(20px)';
-      context.stroke();
-      context.closePath();
-    } else {
-      return;
+
+
+    drawLine(x0, y0, x1, y1, color) {
+      if(this.state.chromeOrFirefox === true){
+        const context = this.canvas.current.getContext('2d');
+        context.beginPath();
+        context.moveTo(x0, y0);
+        context.lineTo(x1, y1);
+        context.strokeStyle = color;
+        context.lineWidth = this.state.lineWidth;
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
+        context.filter = 'blur(20px)';
+        context.stroke();
+        context.closePath();
+      }else{
+        return;
+      }
     }
-  }
+
 
   _onMouseMove = (e) => {
     const topOfElement = this.canvas.current.getBoundingClientRect().top + document.documentElement.scrollTop;
@@ -121,7 +117,7 @@ class App extends Component {
 
   _onMouseOver = (e) => {
     if (!this.state.hasMousedOver
-      && this.state.shouldDraw) {
+        && this.state.shouldDraw) {
       const canvas = this.canvas.current;
       const context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -157,28 +153,16 @@ class App extends Component {
     return (
       <div
         className="main_container"
-        ref={this.container}
-      >{
-          this.props.shouldDraw === true ? (
-            <canvas
-              width={this.state.width}
-              height={this.state.height}
-              className="canvas"
-              onMouseMove={this.throttledDraw}
-              onMouseOver={this._onMouseOver}
-              style={style}
-              ref={this.canvas}
-            />
-          ) : (
-              <canvas
-                width={this.state.width}
-                height={this.state.height}
-                className="canvas"
-                style={style}
-                ref={this.canvas}
-              />
-            )
-        }
+        ref={this.container}>
+        <canvas
+          width={this.state.width}
+          height={this.state.height}
+          className="canvas"
+          onMouseMove={this.throttledDraw}
+          onMouseOver={this._onMouseOver}
+          style={style}
+          ref={this.canvas}
+        />
       </div>
     );
   }
