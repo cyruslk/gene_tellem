@@ -9,7 +9,7 @@ import {
 
 import './App.css';
 import GeneCanvas from './GeneCanvas';
-import getRandomColor from './colors';
+import getRandomsColor from './colors';
 
 const CONFIG = require('./config.js');
 const preFix = "https://spreadsheets.google.com/feeds/list/";
@@ -35,7 +35,7 @@ class App extends Component {
 
   componentDidMount() {
 
-    const color = getRandomColor();
+    const color = getRandomsColor();
     const colorString1 = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
     const colorString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`;
     const backgroundColorString = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
@@ -49,29 +49,27 @@ class App extends Component {
     );
     this.db = mongodb.db("gene_db");
     this.retrieveDataFromDBOnLoad();
+    this.getRandoms();
 
     // get from the spreadsheet cms
     axios.get(spreadsheetURL)
     .then((response) => {
-
-    let dataWithColors = response.data.feed.entry.map((ele) => {
-
-    const item = {
-      name: ele.gsx$name.$t,
-      info_secondaire: ele.gsx$infosecondaire.$t,
-      blury_text: ele.gsx$blurytext.$t,
-      name_end: ele.gsx$nameend.$t,
-      link: ele.gsx$link.$t
-    };
-    return {
-      item,
-      backgroundColorString,
-      colorString1,
-      colorString,
-      colorDbCollectionName
-    };
-     })
-
+      let dataWithColors = response.data.feed.entry.map((ele) => {
+      const item = {
+        name: ele.gsx$name.$t,
+        info_secondaire: ele.gsx$infosecondaire.$t,
+        blury_text: ele.gsx$blurytext.$t,
+        name_end: ele.gsx$nameend.$t,
+        link: ele.gsx$link.$t
+      };
+      return {
+        item,
+        backgroundColorString,
+        colorString1,
+        colorString,
+        colorDbCollectionName
+      };
+       })
      // adding everything in the state now;
       this.setState({
         data: dataWithColors,
@@ -101,6 +99,15 @@ class App extends Component {
      }).catch(error => {
        console.log(error);
      });
+
+
+     // get the randomy stuff here
+
+   };
+
+
+   getRandoms = () => {
+     console.log(this.state);
    };
 
   retrieveDataFromDBOnLoad = () => {
@@ -132,8 +139,6 @@ class App extends Component {
     if(!this.state.data){ return null }
 
     const items = data.map((item, i) => {
-
-      console.log(item,i);
 
       const stringToArrayName = item.item.name.split('');
       const stringToArrayBluryText = item.item.name_end.split(' ');
@@ -271,7 +276,7 @@ class App extends Component {
       </div>
     );
   }
-  
+
   return (
     <div>
     <div className="loader_screen_container canvas_loader">

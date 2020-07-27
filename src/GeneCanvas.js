@@ -20,9 +20,16 @@ class App extends Component {
   }
 
   componentDidMount() {
+
+    console.log(this.props);
+
+
     this.setCanvasSize();
     window.addEventListener('resize', this.throttledSetCanvasSize);
+
     this.dbColorString = this.props.colorString.slice(5, -1).split(', ').slice(0, 3).join('');
+    // console.log(this.dbColorString, "---");
+
     if (this.props.shouldDraw === true) {
       this.fetchImages();
     }
@@ -98,10 +105,6 @@ class App extends Component {
     }
   }
 
-  _onMouseOut = (e) => {
-    this.createImage();
-  }
-
   _onMouseMove = (e) => {
     const topOfElement = this.canvas.current.getBoundingClientRect().top + document.documentElement.scrollTop;
     const x = e.pageX;
@@ -128,22 +131,6 @@ class App extends Component {
     }
   }
 
-  createImage() {
-    // REMOVED FOR NOW
-    const data = {
-      data: this.canvas.current.toDataURL(),
-    };
-
-    fetch(`/sendPic/${this.dbColorString}`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'content-type': 'application/json'
-      },
-    }).then((res) => {
-      console.log("successfully sent to db");
-    });
-  }
 
   throttle(callback, delay) {
     let previousCall = new Date().getTime();
@@ -178,7 +165,6 @@ class App extends Component {
               height={this.state.height}
               className="canvas"
               onMouseMove={this.throttledDraw}
-              onMouseOut={this._onMouseOut}
               onMouseOver={this._onMouseOver}
               style={style}
               ref={this.canvas}
