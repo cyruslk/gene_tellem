@@ -100,10 +100,6 @@ class App extends Component {
      }).catch(error => {
        console.log(error);
      });
-
-
-     // get the randomy stuff here
-
    };
 
 
@@ -173,12 +169,11 @@ class App extends Component {
           className="main_sections"
           style={{
             backgroundColor: item.backgroundColorString,
-          }}
-        >
+          }}>
           <h1 key={i + 1 * 1} style={coloredBackgroundBlocsH1}>
             {newArrayName}
             <span style={coloredBackgroundBlocsSpans}>
-              {item.blury_text}
+              {item.item.blury_text}
             </span>
             {newArrayBluryText}
           </h1>
@@ -190,8 +185,9 @@ class App extends Component {
             colorString= {this.state.colorString}
             colorDbCollectionName="000"
           />
-          <a className="block_links shake" style={coloredBackgroundBlocsSpans}
-            href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
+          <a className="block_links shake" style={coloredBackgroundBlocsSpans} href={item.item.link} rel="noopener noreferrer" target="_blank">
+            {item.item.info_secondaire}
+          </a>
         </section>
       );
     }
@@ -200,7 +196,7 @@ class App extends Component {
         <h1 key={i + 1 * 1} style={whiteBackgroundBlocsH1}>
           {newArrayName}
           <span style={whiteBackgroundBlocsSpans}>
-            {item.blury_text}
+            {item.item.blury_text}
           </span>
           {newArrayBluryText}
         </h1>
@@ -214,8 +210,9 @@ class App extends Component {
           colorDbCollectionName="000"
           dbContent={this.state.dbContent}
         />
-        <a className="block_links shake" style={whiteBackgroundBlocsH1}
-        href={item.link} rel="noopener noreferrer" target="_blank">{item.info_secondaire}</a>
+        <a className="block_links shake" style={whiteBackgroundBlocsH1} href={item.item.link} rel="noopener noreferrer" target="_blank">
+          {item.item.info_secondaire}
+        </a>
       </section>
     );
   });
@@ -241,22 +238,14 @@ class App extends Component {
   const itemHeader = headerData.map((item, i) => {
     if (i % 2) {
       return (
-        <span key={i + 1 * 2}
-          style={coloredBackgroundHeader}
-        >
-        <a href={item.link} target="_blank">
-          {item.name}
-        </a>
+        <span key={i + 1 * 2} style={coloredBackgroundHeader}>
+          <a href={item.link} target="_blank">{item.name}</a>
         </span>
       );
     }
     return (
-      <span key={i + 2 * 4}
-        style={whiteBackgroundHeader}
-      >
-      <a href={item.link} target="_blank">
-        {item.name}
-      </a>
+      <span key={i + 2 * 4} style={whiteBackgroundHeader}>
+        <a href={item.link} target="_blank">{item.name}</a>
       </span>
     );
   });
