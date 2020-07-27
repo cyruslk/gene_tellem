@@ -242,7 +242,9 @@ span {
   font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
   font-size: 1.2vw;
   opacity: 0.2;
-  padding-bottom: 3vw;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  text-transform: uppercase;
 }
 
 

@@ -302,7 +302,7 @@ class App extends Component {
         {resultsRender}
       </div>
       <section className="credits">
-        code & design ---> &nbsp; <a href="http://www.c-t-l-k.com" target="_blank" rel="noopener noreferrer">www.c-t-l-k.com</a> &nbsp; (+ thanks to Conan Lai )
+        code & design &nbsp;: &nbsp; <a href="http://www.c-t-l-k.com" target="_blank" rel="noopener noreferrer">www.75-20.com</a> &nbsp; (~ thanks to Conan Lai )
       </section>
     </div>
     </div>
